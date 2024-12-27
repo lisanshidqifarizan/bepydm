@@ -9,13 +9,19 @@ from mangum import Mangum
 # FastAPI app initialization
 app = FastAPI()
 
-# Enable CORS
+# Tambahkan daftar origin yang diizinkan
+origins = [
+    "http://localhost:3000",  # Frontend local development
+    "https://fejsdm.vercel.app"  # Tambahkan domain frontend produksi Anda (jika ada)
+]
+
+# Middleware CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Replace "*" with your frontend domain in production
+    allow_origins=origins,  # Ganti "*" dengan daftar origin
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["*"],  # Ijinkan semua metode (GET, POST, dll.)
+    allow_headers=["*"],  # Ijinkan semua header
 )
 
 # Load dataset from topuniversities.csv
