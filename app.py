@@ -19,28 +19,31 @@ app.add_middleware(
 )
 
 # Sample dataset and model
-data = pd.DataFrame({
-    'University Name': ['A', 'B', 'C', 'D'],
-    'Overall Score': [90, 60, 40, 85],
-    'Citations per Paper': [45, 32, 20, 50],
-    'Papers per Faculty': [12, 8, 5, 15],
-    'Academic Reputation': [80, 70, 50, 90],
-    'Faculty Student Ratio': [10, 15, 20, 5],
-})
+data = pd.read_csv('topuniversities.csv')
+data = data[['University Name', 'Overall Score', 'Citations per Paper', 'Papers per Faculty', 'Academic Reputation', 
+             'Faculty Student Ratio', 'Staff with PhD', 'International Research Center', 
+             'International Students', 'Outbound Exchange', 'Inbound Exchange', 
+             'International Faculty', 'Employer Reputation']]
 
 # Process data
+data = data.dropna()
 data['Success'] = (data['Overall Score'] >= 50).astype(int)
-X = data[['Citations per Paper', 'Papers per Faculty', 'Academic Reputation', 'Faculty Student Ratio']]
+X = data.drop(columns=['Overall Score', 'Success', 'University Name'])
 y = data['Success']
 
 # Split and train model
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-model = RandomForestClassifier(n_estimators=10, random_state=42)
+model = RandomForestClassifier(n_estimators=100, random_state=42)
 model.fit(X_train, y_train)
 
 # Evaluate model
 y_pred = model.predict(X_test)
 accuracy = accuracy_score(y_test, y_pred) * 100
+classification_report_str = classification_report(y_test, y_pred)
+
+data['Predicted Success'] = model.predict(X)
+
+data.to_csv('processed_topuniversities.csv', index=False)
 
 # API endpoints
 @app.get("/predict")
