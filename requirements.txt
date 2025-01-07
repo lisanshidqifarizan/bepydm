@@ -1,10 +1,5 @@
-fastapi==0.115.6
-uvicorn==0.22.0
-pandas==1.5.3
-scikit-learn==1.2.2
-numpy==1.24.3
-mangum==0.20.0
-annotated-types==0.7.0
-anyio==4.7.0
-typing_extensions==4.12.2
-pydantic==2.10.4
+fastapi
+uvicorn[standard]
+pandas
+scikit-learn
+python-dotenv
